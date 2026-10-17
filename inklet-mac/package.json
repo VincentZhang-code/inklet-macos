@@ -1,0 +1,23 @@
+{
+  "name": "inklet-mac",
+  "productName": "Inklet",
+  "version": "0.11.0",
+  "private": true,
+  "description": "Inklet macOS desktop, sharing the Windows 0.11.0 editor",
+  "license": "Apache-2.0",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "install:runtime": "install-electron",
+    "build:web": "node tools/build-web.mjs",
+    "test": "node --test --test-reporter=tap test/*.test.cjs",
+    "test:desktop": "node tools/test-desktop.mjs",
+    "package:mac": "node tools/package.mjs",
+    "package:intel": "node tools/package.mjs --arch=x64"
+  },
+  "devDependencies": {
+    "electron": "44.8.0",
+    "@electron/packager": "20.3.0",
+    "jszip": "3.10.1"
+  }
+}

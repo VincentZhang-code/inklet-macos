@@ -1,0 +1,7 @@
+**/node_modules/
+**/build/
+**/release/
+**/runtime/
+**/verification/
+inklet-mac/web/
+.DS_Store

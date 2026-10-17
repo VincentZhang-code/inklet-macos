@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            inklet/app/package-lock.json
+            inklet-mac/package-lock.json
+      - run: npm ci --prefix inklet/app --no-audit --no-fund
+      - run: npm ci --prefix inklet-mac --no-audit --no-fund
+      - run: npm test --prefix inklet/app
+      - run: npm test --prefix inklet-mac
+      - run: npm run build:web --prefix inklet-mac
+
+  macos-desktop:
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            inklet/app/package-lock.json
+            inklet-mac/package-lock.json
+      - run: npm ci --prefix inklet/app --no-audit --no-fund
+      - run: npm ci --prefix inklet-mac --no-audit --no-fund
+      - run: npm run install:runtime --prefix inklet-mac
+      - run: npm run build:web --prefix inklet-mac
+      - run: npm run test:desktop --prefix inklet-mac
